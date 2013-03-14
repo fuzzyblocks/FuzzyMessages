@@ -52,7 +52,7 @@ public class FuzzyMessages extends JavaPlugin {
             getServer().getPluginManager().registerEvents(new JoinListener(this), this);
         if (this.getConfig().getBoolean("CustomQuit"))
             getServer().getPluginManager().registerEvents(new QuitListener(this), this);
-        if (this.getConfig().getBoolean("CustomJoin"))
+        if (this.getConfig().getBoolean("CustomDeath"))
             getServer().getPluginManager().registerEvents(new DeathListener(this), this);
     }
 }
