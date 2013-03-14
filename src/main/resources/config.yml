@@ -1,0 +1,3 @@
+CustomMessages: false
+JoinMessage: "%p joined the game."
+QuitMessage: "%p left the game."
