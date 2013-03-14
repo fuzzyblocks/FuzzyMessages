@@ -48,11 +48,11 @@ public class FuzzyMessages extends JavaPlugin {
         logger.info("[FuzzyMessages] FuzzyMessages enabled.");
         saveDefaultConfig();
         saveConfig();
-        if (this.getConfig().getBoolean("CustomMessages"));
-        {
+        if (this.getConfig().getBoolean("CustomJoin"))
             getServer().getPluginManager().registerEvents(new JoinListener(this), this);
+        if (this.getConfig().getBoolean("CustomQuit"))
             getServer().getPluginManager().registerEvents(new QuitListener(this), this);
+        if (this.getConfig().getBoolean("CustomJoin"))
             getServer().getPluginManager().registerEvents(new DeathListener(this), this);
-        }
     }
 }
