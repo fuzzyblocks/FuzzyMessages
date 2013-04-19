@@ -48,6 +48,6 @@ public class JoinListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        e.setJoinMessage(ChatColor.AQUA + this.plugin.getConfig().getString("JoinMessage").replace("%p", p.getDisplayName()));
+        e.setJoinMessage(ChatColor.AQUA + plugin.joinmessage.replace("%p", p.getDisplayName()));
     }
 }

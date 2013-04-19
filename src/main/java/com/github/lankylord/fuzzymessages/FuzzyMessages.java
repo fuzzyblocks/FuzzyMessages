@@ -36,6 +36,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class FuzzyMessages extends JavaPlugin {
 
     static final Logger logger = Logger.getLogger("Minecraft");
+    public String joinmessage;
+    public String quitmessage;
 
     @Override
     public void onDisable() {
@@ -48,10 +50,14 @@ public class FuzzyMessages extends JavaPlugin {
         logger.info("[FuzzyMessages] FuzzyMessages enabled.");
         saveDefaultConfig();
         saveConfig();
-        if (this.getConfig().getBoolean("CustomJoin"))
+        if (this.getConfig().getBoolean("CustomJoin")) {
             getServer().getPluginManager().registerEvents(new JoinListener(this), this);
-        if (this.getConfig().getBoolean("CustomQuit"))
+            joinmessage = this.getConfig().getString("JoinMessage");
+        }
+        if (this.getConfig().getBoolean("CustomQuit")) {
             getServer().getPluginManager().registerEvents(new QuitListener(this), this);
+            quitmessage = this.getConfig().getString("QuitMessage");
+        }
         if (this.getConfig().getBoolean("CustomDeath"))
             getServer().getPluginManager().registerEvents(new DeathListener(this), this);
     }
