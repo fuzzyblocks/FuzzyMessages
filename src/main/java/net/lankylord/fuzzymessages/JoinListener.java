@@ -24,38 +24,30 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.github.lankylord.fuzzymessages;
+package net.lankylord.fuzzymessages;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 /**
  *
  * @author LankyLord
  */
-public class DeathListener implements Listener {
+public class JoinListener implements Listener {
 
     private FuzzyMessages plugin;
 
-    public DeathListener(FuzzyMessages plugin) {
+    public JoinListener(FuzzyMessages plugin) {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
-    public void onDeath(PlayerDeathEvent e) {
-        Player p = e.getEntity();
-        String msg = e.getDeathMessage();
-        String death = msg.replace(p.getName(), p.getDisplayName());
-        if(p.getKiller() != null) {
-            Player k = p.getKiller();
-            String playerkill = death.replace(k.getName(), k.getDisplayName());
-            e.setDeathMessage(ChatColor.RED + playerkill);
-        } else {
-            e.setDeathMessage(ChatColor.RED + death);
-        }
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onJoin(PlayerJoinEvent e) {
+        Player p = e.getPlayer();
+        e.setJoinMessage(ChatColor.AQUA + plugin.joinmessage.replace("%p", p.getDisplayName()));
     }
 }

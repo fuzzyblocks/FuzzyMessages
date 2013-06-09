@@ -3,5 +3,5 @@ version: 1.0-SNAPSHOT
 description: Customize various messages
 author: Lanky_Lord
 
-main: com.github.lankylord.fuzzymessages.FuzzyMessages
+main: net.lankylord.fuzzymessages.FuzzyMessages
 database: false

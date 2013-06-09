@@ -24,30 +24,41 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.github.lankylord.fuzzymessages;
+package net.lankylord.fuzzymessages;
 
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
+import java.util.logging.Logger;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  *
  * @author LankyLord
  */
-public class JoinListener implements Listener {
+public class FuzzyMessages extends JavaPlugin {
 
-    private FuzzyMessages plugin;
+    static final Logger logger = Logger.getLogger("Minecraft");
+    public String joinmessage;
+    public String quitmessage;
 
-    public JoinListener(FuzzyMessages plugin) {
-        this.plugin = plugin;
+    @Override
+    public void onDisable() {
+        logger.info("[FuzzyMessages] FuzzyMessages disabled.");
+        saveConfig();
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onJoin(PlayerJoinEvent e) {
-        Player p = e.getPlayer();
-        e.setJoinMessage(ChatColor.AQUA + plugin.joinmessage.replace("%p", p.getDisplayName()));
+    @Override
+    public void onEnable() {
+        logger.info("[FuzzyMessages] FuzzyMessages enabled.");
+        saveDefaultConfig();
+        saveConfig();
+        if (this.getConfig().getBoolean("CustomJoin")) {
+            getServer().getPluginManager().registerEvents(new JoinListener(this), this);
+            joinmessage = this.getConfig().getString("JoinMessage");
+        }
+        if (this.getConfig().getBoolean("CustomQuit")) {
+            getServer().getPluginManager().registerEvents(new QuitListener(this), this);
+            quitmessage = this.getConfig().getString("QuitMessage");
+        }
+        if (this.getConfig().getBoolean("CustomDeath"))
+            getServer().getPluginManager().registerEvents(new DeathListener(this), this);
     }
 }
