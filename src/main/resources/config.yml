@@ -1,5 +1,7 @@
-CustomJoin: false
-CustomQuit: false
-CustomDeath: false
-JoinMessage: "%p joined the game."
-QuitMessage: "%p left the game."
+#Use %p to represent a player's name
+enable-custom-join: true
+enable-custom-quit: true
+enable-custom-death: true
+enable-display-names: false
+custom-join-message: "&e%p joined the game."
+custom-quit-message: "&e%p left the game."

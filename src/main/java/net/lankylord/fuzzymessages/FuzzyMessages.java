@@ -26,6 +26,10 @@
  */
 package net.lankylord.fuzzymessages;
 
+import net.lankylord.fuzzymessages.listeners.DeathListener;
+import net.lankylord.fuzzymessages.utils.ConfigManager;
+import net.lankylord.fuzzymessages.listeners.QuitListener;
+import net.lankylord.fuzzymessages.listeners.JoinListener;
 import java.util.logging.Logger;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -36,8 +40,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class FuzzyMessages extends JavaPlugin {
 
     static final Logger logger = Logger.getLogger("Minecraft");
-    public String joinmessage;
-    public String quitmessage;
+    private ConfigManager confmanager;
 
     @Override
     public void onDisable() {
@@ -50,15 +53,12 @@ public class FuzzyMessages extends JavaPlugin {
         logger.info("[FuzzyMessages] FuzzyMessages enabled.");
         saveDefaultConfig();
         saveConfig();
-        if (this.getConfig().getBoolean("CustomJoin")) {
-            getServer().getPluginManager().registerEvents(new JoinListener(this), this);
-            joinmessage = this.getConfig().getString("JoinMessage");
-        }
-        if (this.getConfig().getBoolean("CustomQuit")) {
-            getServer().getPluginManager().registerEvents(new QuitListener(this), this);
-            quitmessage = this.getConfig().getString("QuitMessage");
-        }
-        if (this.getConfig().getBoolean("CustomDeath"))
-            getServer().getPluginManager().registerEvents(new DeathListener(this), this);
+        confmanager = new ConfigManager(this);
+        if (ConfigManager.enableCustomJoin || ConfigManager.enableDisplayNames)
+            getServer().getPluginManager().registerEvents(new JoinListener(), this);
+        if (ConfigManager.enableCustomQuit || ConfigManager.enableDisplayNames)
+            getServer().getPluginManager().registerEvents(new QuitListener(), this);
+        if (ConfigManager.enableColouredDeath || ConfigManager.enableDisplayNames)
+            getServer().getPluginManager().registerEvents(new DeathListener(), this);
     }
 }

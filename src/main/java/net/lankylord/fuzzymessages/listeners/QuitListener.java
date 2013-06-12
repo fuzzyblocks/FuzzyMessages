@@ -24,30 +24,41 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.lankylord.fuzzymessages;
+package net.lankylord.fuzzymessages.listeners;
 
-import org.bukkit.ChatColor;
+import net.lankylord.fuzzymessages.utils.ConfigManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 /**
  *
  * @author LankyLord
  */
-public class JoinListener implements Listener {
+public class QuitListener implements Listener {
 
-    private FuzzyMessages plugin;
-
-    public JoinListener(FuzzyMessages plugin) {
-        this.plugin = plugin;
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
+    public void onPlayerQuit(PlayerQuitEvent e) {
+        Player p = e.getPlayer();
+        String quitmsg;
+        if (ConfigManager.enableDisplayNames)
+            quitmsg = ConfigManager.customQuitMessage.replace("%p", p.getDisplayName());
+        else
+            quitmsg = ConfigManager.customQuitMessage.replace("%p", p.getName());
+        e.setQuitMessage(quitmsg);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onJoin(PlayerJoinEvent e) {
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
+    public void onPlayerKick(PlayerKickEvent e) {
         Player p = e.getPlayer();
-        e.setJoinMessage(ChatColor.AQUA + plugin.joinmessage.replace("%p", p.getDisplayName()));
+        String quitmsg;
+        if (ConfigManager.enableDisplayNames)
+            quitmsg = ConfigManager.customQuitMessage.replace("%p", p.getDisplayName());
+        else
+            quitmsg = ConfigManager.customQuitMessage.replace("%p", p.getName());
+        e.setLeaveMessage(quitmsg);
     }
 }

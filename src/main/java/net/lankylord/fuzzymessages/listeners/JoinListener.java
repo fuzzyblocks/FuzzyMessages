@@ -24,37 +24,29 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.lankylord.fuzzymessages;
+package net.lankylord.fuzzymessages.listeners;
 
-import org.bukkit.ChatColor;
+import net.lankylord.fuzzymessages.utils.ConfigManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 /**
  *
  * @author LankyLord
  */
-public class QuitListener implements Listener {
+public class JoinListener implements Listener {
 
-    private FuzzyMessages plugin;
-
-    public QuitListener(FuzzyMessages plugin) {
-        this.plugin = plugin;
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
-    public void onQuit(PlayerQuitEvent e) {
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        e.setQuitMessage(ChatColor.AQUA + plugin.quitmessage.replace("%p", p.getDisplayName()));
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
-    public void onKick(PlayerKickEvent e) {
-        Player p = e.getPlayer();
-        e.setLeaveMessage(ChatColor.AQUA + plugin.quitmessage.replace("%p", p.getDisplayName()));
+        String joinmsg;
+        if (ConfigManager.enableDisplayNames)
+            joinmsg = ConfigManager.customJoinMessage.replace("%p", p.getDisplayName());
+        else
+            joinmsg = ConfigManager.customJoinMessage.replace("%p", p.getName());
+        e.setJoinMessage(joinmsg);
     }
 }

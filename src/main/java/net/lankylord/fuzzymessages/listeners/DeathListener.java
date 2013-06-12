@@ -24,8 +24,9 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.lankylord.fuzzymessages;
+package net.lankylord.fuzzymessages.listeners;
 
+import net.lankylord.fuzzymessages.utils.ConfigManager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -39,23 +40,20 @@ import org.bukkit.event.entity.PlayerDeathEvent;
  */
 public class DeathListener implements Listener {
 
-    private FuzzyMessages plugin;
-
-    public DeathListener(FuzzyMessages plugin) {
-        this.plugin = plugin;
-    }
-
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
-    public void onDeath(PlayerDeathEvent e) {
-        Player p = e.getEntity();
-        String msg = e.getDeathMessage();
-        String death = msg.replace(p.getName(), p.getDisplayName());
-        if(p.getKiller() != null) {
-            Player k = p.getKiller();
-            String playerkill = death.replace(k.getName(), k.getDisplayName());
-            e.setDeathMessage(ChatColor.RED + playerkill);
-        } else {
-            e.setDeathMessage(ChatColor.RED + death);
+    public void onPlayerDeath(PlayerDeathEvent e) {
+        Player player = e.getEntity();
+        String deathmsg = e.getDeathMessage();
+        if (ConfigManager.enableDisplayNames) {
+            deathmsg = deathmsg.replace(player.getName(), player.getDisplayName());
+            if (player.getKiller() != null) {
+                Player killer = player.getKiller();
+                deathmsg = deathmsg.replace(killer.getName(), killer.getDisplayName());
+            }
         }
+        if (ConfigManager.enableColouredDeath)
+            e.setDeathMessage(ChatColor.RED + deathmsg);
+        else
+            e.setDeathMessage(deathmsg);
     }
 }
