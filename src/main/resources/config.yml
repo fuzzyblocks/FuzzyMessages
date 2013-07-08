@@ -1,7 +1,9 @@
 #Use %p to represent a player's name
 enable-custom-join: true
+enable-custom-kick: true
 enable-custom-quit: true
 enable-custom-death: true
 enable-display-names: false
 custom-join-message: "&e%p joined the game."
+custom-kick-message: "&e%p was kicked from the game."
 custom-quit-message: "&e%p left the game."

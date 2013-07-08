@@ -1,7 +1,7 @@
 name: FuzzyMessages
-version: 1.0-SNAPSHOT
+version: maven-version-number
 description: Customize various messages
-author: Lanky_Lord
+authors: [Lanky_Lord, cedeel]
 
 main: net.lankylord.fuzzymessages.FuzzyMessages
 database: false

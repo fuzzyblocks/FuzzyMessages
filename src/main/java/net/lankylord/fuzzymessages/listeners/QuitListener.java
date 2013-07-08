@@ -43,22 +43,20 @@ public class QuitListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
     public void onPlayerQuit(PlayerQuitEvent e) {
         Player p = e.getPlayer();
-        String quitmsg;
+        String quitMessage = ConfigManager.customQuitMessage;
         if (ConfigManager.enableDisplayNames)
-            quitmsg = ConfigManager.customQuitMessage.replace("%p", p.getDisplayName());
-        else
-            quitmsg = ConfigManager.customQuitMessage.replace("%p", p.getName());
-        e.setQuitMessage(quitmsg);
+            quitMessage = quitMessage.replace("%d", p.getDisplayName());
+        quitMessage = quitMessage.replace("%p", p.getName());
+        e.setQuitMessage(quitMessage);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
     public void onPlayerKick(PlayerKickEvent e) {
         Player p = e.getPlayer();
-        String quitmsg;
+        String kickMessage = ConfigManager.customKickMessage;
         if (ConfigManager.enableDisplayNames)
-            quitmsg = ConfigManager.customQuitMessage.replace("%p", p.getDisplayName());
-        else
-            quitmsg = ConfigManager.customQuitMessage.replace("%p", p.getName());
-        e.setLeaveMessage(quitmsg);
+            kickMessage = kickMessage.replace("%d", p.getDisplayName());
+        kickMessage = kickMessage.replace("%p", p.getName());
+        e.setLeaveMessage(kickMessage);
     }
 }

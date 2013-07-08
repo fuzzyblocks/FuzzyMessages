@@ -30,7 +30,6 @@ import net.lankylord.fuzzymessages.listeners.DeathListener;
 import net.lankylord.fuzzymessages.utils.ConfigManager;
 import net.lankylord.fuzzymessages.listeners.QuitListener;
 import net.lankylord.fuzzymessages.listeners.JoinListener;
-import java.util.logging.Logger;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -39,26 +38,20 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class FuzzyMessages extends JavaPlugin {
 
-    static final Logger logger = Logger.getLogger("Minecraft");
-    private ConfigManager confmanager;
-
     @Override
     public void onDisable() {
-        logger.info("[FuzzyMessages] FuzzyMessages disabled.");
         saveConfig();
     }
 
     @Override
     public void onEnable() {
-        logger.info("[FuzzyMessages] FuzzyMessages enabled.");
         saveDefaultConfig();
         saveConfig();
-        confmanager = new ConfigManager(this);
-        if (ConfigManager.enableCustomJoin || ConfigManager.enableDisplayNames)
+        if (ConfigManager.enableCustomJoin)
             getServer().getPluginManager().registerEvents(new JoinListener(), this);
-        if (ConfigManager.enableCustomQuit || ConfigManager.enableDisplayNames)
+        if (ConfigManager.enableCustomQuit || ConfigManager.enableCustomKick)
             getServer().getPluginManager().registerEvents(new QuitListener(), this);
-        if (ConfigManager.enableColouredDeath || ConfigManager.enableDisplayNames)
+        if (ConfigManager.enableColouredDeath)
             getServer().getPluginManager().registerEvents(new DeathListener(), this);
     }
 }

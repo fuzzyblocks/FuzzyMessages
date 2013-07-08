@@ -27,6 +27,7 @@ package net.lankylord.fuzzymessages.utils;
 
 import net.lankylord.fuzzymessages.FuzzyMessages;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
 
 /**
  *
@@ -36,10 +37,12 @@ public class ConfigManager {
 
     private FuzzyMessages plugin;
     public static boolean enableCustomJoin;
+    public static boolean enableCustomKick;
     public static boolean enableCustomQuit;
     public static boolean enableColouredDeath;
     public static boolean enableDisplayNames;
     public static String customJoinMessage;
+    public static String customKickMessage;
     public static String customQuitMessage;
 
     public ConfigManager(FuzzyMessages plugin) {
@@ -52,12 +55,15 @@ public class ConfigManager {
     }
 
     public final void loadConfig() {
-        enableCustomJoin = plugin.getConfig().getBoolean("enable-custom-join");
-        enableCustomQuit = plugin.getConfig().getBoolean("enable-custom-quit");
-        enableColouredDeath = plugin.getConfig().getBoolean("enable-coloured-death");
-        enableDisplayNames = plugin.getConfig().getBoolean("enable-display-names");
+        FileConfiguration fc = plugin.getConfig();
+        enableCustomJoin = fc.getBoolean("enable-custom-join", true);
+        enableCustomKick = fc.getBoolean("enable-custom-kick", true);
+        enableCustomQuit = fc.getBoolean("enable-custom-quit", true);
+        enableColouredDeath = fc.getBoolean("enable-coloured-death", true);
+        enableDisplayNames = fc.getBoolean("enable-display-names", false);
 
-        customJoinMessage = this.applyColourCodes(plugin.getConfig().getString("custom-join-message"));
-        customQuitMessage = this.applyColourCodes(plugin.getConfig().getString("custom-quit-message"));
+        customJoinMessage = this.applyColourCodes(fc.getString("custom-join-message"));
+        customKickMessage = this.applyColourCodes(fc.getString("custom-kick-message"));
+        customQuitMessage = this.applyColourCodes(fc.getString("custom-quit-message"));
     }
 }

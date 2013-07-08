@@ -43,17 +43,17 @@ public class DeathListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
     public void onPlayerDeath(PlayerDeathEvent e) {
         Player player = e.getEntity();
-        String deathmsg = e.getDeathMessage();
+        String deathMessage = e.getDeathMessage();
         if (ConfigManager.enableDisplayNames) {
-            deathmsg = deathmsg.replace(player.getName(), player.getDisplayName());
+            deathMessage = deathMessage.replace(player.getName(), player.getDisplayName());
             if (player.getKiller() != null) {
                 Player killer = player.getKiller();
-                deathmsg = deathmsg.replace(killer.getName(), killer.getDisplayName());
+                deathMessage = deathMessage.replace(killer.getName(), killer.getDisplayName());
             }
         }
         if (ConfigManager.enableColouredDeath)
-            e.setDeathMessage(ChatColor.RED + deathmsg);
+            e.setDeathMessage(ChatColor.RED + deathMessage);
         else
-            e.setDeathMessage(deathmsg);
+            e.setDeathMessage(deathMessage);
     }
 }
