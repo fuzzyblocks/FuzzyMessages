@@ -38,6 +38,8 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class FuzzyMessages extends JavaPlugin {
 
+    private ConfigManager configManager;
+
     @Override
     public void onDisable() {
         saveConfig();
@@ -47,6 +49,7 @@ public class FuzzyMessages extends JavaPlugin {
     public void onEnable() {
         saveDefaultConfig();
         saveConfig();
+        configManager = new ConfigManager(this);
         if (ConfigManager.enableCustomJoin)
             getServer().getPluginManager().registerEvents(new JoinListener(), this);
         if (ConfigManager.enableCustomQuit || ConfigManager.enableCustomKick)
