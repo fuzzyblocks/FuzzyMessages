@@ -42,12 +42,11 @@ public class JoinListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        String address = p.getAddress().getHostName();
         String joinMessage = ConfigManager.customJoinMessage;
         if (ConfigManager.enableDisplayNames)
             joinMessage = joinMessage.replace("%d", p.getDisplayName());
 
-        joinMessage = joinMessage.replace("%p", p.getName()).replace("%a", address);
+        joinMessage = joinMessage.replace("%p", p.getName());
         e.setJoinMessage(joinMessage);
     }
 }
