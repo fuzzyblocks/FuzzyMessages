@@ -1,5 +1,5 @@
-name: FuzzyMessages
-version: maven-version-number
+name: ${name}
+version: ${version}
 description: Customize various messages
 authors: [Lanky_Lord, cedeel]
 
