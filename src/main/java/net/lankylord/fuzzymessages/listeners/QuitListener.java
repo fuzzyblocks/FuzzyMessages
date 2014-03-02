@@ -34,29 +34,34 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.util.HashMap;
+
 /**
  *
  * @author LankyLord
  */
 public class QuitListener implements Listener {
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
+    private HashMap<String, String> kicked = new HashMap<>();
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerQuit(PlayerQuitEvent e) {
         Player p = e.getPlayer();
-        String quitMessage = ConfigManager.customQuitMessage;
-        if (ConfigManager.enableDisplayNames)
-            quitMessage = quitMessage.replace("%d", p.getDisplayName());
-        quitMessage = quitMessage.replace("%p", p.getName());
-        e.setQuitMessage(quitMessage);
+        String reason = kicked.remove(p.getName());
+        e.setQuitMessage(generateMessage(p, reason != null, reason));
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerKick(PlayerKickEvent e) {
-        Player p = e.getPlayer();
-        String kickMessage = ConfigManager.customKickMessage;
-        if (ConfigManager.enableDisplayNames)
-            kickMessage = kickMessage.replace("%d", p.getDisplayName());
-        kickMessage = kickMessage.replace("%p", p.getName());
-        e.setLeaveMessage(kickMessage);
+        kicked.put(e.getPlayer().getName(), e.getReason());
+    }
+
+    private String generateMessage(Player player, boolean isKick, String kickMessage) {
+        String result = isKick ? ConfigManager.customKickMessage.replace("%r", kickMessage) : ConfigManager.customQuitMessage;
+        if (ConfigManager.enableDisplayNames) {
+            result = result.replace("%d", player.getDisplayName());
+        }
+        result = result.replace("%p", player.getName());
+        return result;
     }
 }

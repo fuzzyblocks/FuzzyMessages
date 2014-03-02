@@ -33,9 +33,8 @@ import org.bukkit.configuration.file.FileConfiguration;
  *
  * @author LankyLord
  */
-public class ConfigManager {
+public final class ConfigManager {
 
-    private FuzzyMessages plugin;
     public static boolean enableCustomJoin;
     public static boolean enableCustomKick;
     public static boolean enableCustomQuit;
@@ -45,16 +44,13 @@ public class ConfigManager {
     public static String customKickMessage;
     public static String customQuitMessage;
 
-    public ConfigManager(FuzzyMessages plugin) {
-        this.plugin = plugin;
-        loadConfig();
-    }
+    private ConfigManager() { }
 
-    public String applyColourCodes(String message) {
+    public static String applyColourCodes(String message) {
         return ChatColor.translateAlternateColorCodes('&', message);
     }
 
-    public final void loadConfig() {
+    public static void loadConfig(final FuzzyMessages plugin) {
         FileConfiguration fc = plugin.getConfig();
         enableCustomJoin = fc.getBoolean("enable-custom-join", true);
         enableCustomKick = fc.getBoolean("enable-custom-kick", true);
@@ -62,8 +58,8 @@ public class ConfigManager {
         enableColouredDeath = fc.getBoolean("enable-coloured-death", true);
         enableDisplayNames = fc.getBoolean("enable-display-names", false);
 
-        customJoinMessage = this.applyColourCodes(fc.getString("custom-join-message"));
-        customKickMessage = this.applyColourCodes(fc.getString("custom-kick-message"));
-        customQuitMessage = this.applyColourCodes(fc.getString("custom-quit-message"));
+        customJoinMessage = applyColourCodes(fc.getString("custom-join-message"));
+        customKickMessage = applyColourCodes(fc.getString("custom-kick-message"));
+        customQuitMessage = applyColourCodes(fc.getString("custom-quit-message"));
     }
 }
