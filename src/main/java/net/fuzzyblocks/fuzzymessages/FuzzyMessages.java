@@ -24,44 +24,35 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.lankylord.fuzzymessages.listeners;
+package net.fuzzyblocks.fuzzymessages;
 
-import net.lankylord.fuzzymessages.utils.ConfigManager;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-
-import java.util.HashMap;
+import net.fuzzyblocks.fuzzymessages.listeners.DeathListener;
+import net.fuzzyblocks.fuzzymessages.utils.ConfigManager;
+import net.fuzzyblocks.fuzzymessages.listeners.QuitListener;
+import net.fuzzyblocks.fuzzymessages.listeners.JoinListener;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  *
  * @author LankyLord
  */
-public class QuitListener implements Listener {
+public class FuzzyMessages extends JavaPlugin {
 
-    private HashMap<String, String> kicked = new HashMap<>();
-
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onPlayerQuit(PlayerQuitEvent e) {
-        Player p = e.getPlayer();
-        String reason = kicked.remove(p.getName());
-        e.setQuitMessage(generateMessage(p, reason != null, reason));
+    @Override
+    public void onDisable() {
+        saveConfig();
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onPlayerKick(PlayerKickEvent e) {
-        kicked.put(e.getPlayer().getName(), e.getReason());
-    }
-
-    private String generateMessage(Player player, boolean isKick, String kickMessage) {
-        String result = isKick ? ConfigManager.customKickMessage.replace("%r", kickMessage) : ConfigManager.customQuitMessage;
-        if (ConfigManager.enableDisplayNames) {
-            result = result.replace("%d", player.getDisplayName());
-        }
-        result = result.replace("%p", player.getName());
-        return result;
+    @Override
+    public void onEnable() {
+        saveDefaultConfig();
+        saveConfig();
+        ConfigManager.loadConfig(this);
+        if (ConfigManager.enableCustomJoin)
+            getServer().getPluginManager().registerEvents(new JoinListener(), this);
+        if (ConfigManager.enableCustomQuit || ConfigManager.enableCustomKick)
+            getServer().getPluginManager().registerEvents(new QuitListener(), this);
+        if (ConfigManager.enableColouredDeath)
+            getServer().getPluginManager().registerEvents(new DeathListener(), this);
     }
 }

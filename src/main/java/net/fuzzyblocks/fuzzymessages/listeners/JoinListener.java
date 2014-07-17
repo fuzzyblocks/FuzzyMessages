@@ -24,35 +24,29 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.lankylord.fuzzymessages;
+package net.fuzzyblocks.fuzzymessages.listeners;
 
-import net.lankylord.fuzzymessages.listeners.DeathListener;
-import net.lankylord.fuzzymessages.utils.ConfigManager;
-import net.lankylord.fuzzymessages.listeners.QuitListener;
-import net.lankylord.fuzzymessages.listeners.JoinListener;
-import org.bukkit.plugin.java.JavaPlugin;
+import net.fuzzyblocks.fuzzymessages.utils.ConfigManager;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 /**
  *
  * @author LankyLord
  */
-public class FuzzyMessages extends JavaPlugin {
+public class JoinListener implements Listener {
 
-    @Override
-    public void onDisable() {
-        saveConfig();
-    }
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onPlayerJoin(PlayerJoinEvent e) {
+        Player p = e.getPlayer();
+        String joinMessage = ConfigManager.customJoinMessage;
+        if (ConfigManager.enableDisplayNames)
+            joinMessage = joinMessage.replace("%d", p.getDisplayName());
 
-    @Override
-    public void onEnable() {
-        saveDefaultConfig();
-        saveConfig();
-        ConfigManager.loadConfig(this);
-        if (ConfigManager.enableCustomJoin)
-            getServer().getPluginManager().registerEvents(new JoinListener(), this);
-        if (ConfigManager.enableCustomQuit || ConfigManager.enableCustomKick)
-            getServer().getPluginManager().registerEvents(new QuitListener(), this);
-        if (ConfigManager.enableColouredDeath)
-            getServer().getPluginManager().registerEvents(new DeathListener(), this);
+        joinMessage = joinMessage.replace("%p", p.getName());
+        e.setJoinMessage(joinMessage);
     }
 }

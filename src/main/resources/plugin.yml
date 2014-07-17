@@ -3,5 +3,5 @@ version: ${version}
 description: Customize various messages
 authors: [Lanky_Lord, cedeel]
 
-main: net.lankylord.fuzzymessages.FuzzyMessages
+main: net.fuzzyblocks.fuzzymessages.FuzzyMessages
 database: false

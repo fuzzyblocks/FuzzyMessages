@@ -24,36 +24,44 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.lankylord.fuzzymessages.listeners;
+package net.fuzzyblocks.fuzzymessages.listeners;
 
-import net.lankylord.fuzzymessages.utils.ConfigManager;
-import org.bukkit.ChatColor;
+import net.fuzzyblocks.fuzzymessages.utils.ConfigManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+
+import java.util.HashMap;
 
 /**
  *
  * @author LankyLord
  */
-public class DeathListener implements Listener {
+public class QuitListener implements Listener {
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
-    public void onPlayerDeath(PlayerDeathEvent e) {
-        Player player = e.getEntity();
-        String deathMessage = e.getDeathMessage();
+    private HashMap<String, String> kicked = new HashMap<>();
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onPlayerQuit(PlayerQuitEvent e) {
+        Player p = e.getPlayer();
+        String reason = kicked.remove(p.getName());
+        e.setQuitMessage(generateMessage(p, reason != null, reason));
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onPlayerKick(PlayerKickEvent e) {
+        kicked.put(e.getPlayer().getName(), e.getReason());
+    }
+
+    private String generateMessage(Player player, boolean isKick, String kickMessage) {
+        String result = isKick ? ConfigManager.customKickMessage.replace("%r", kickMessage) : ConfigManager.customQuitMessage;
         if (ConfigManager.enableDisplayNames) {
-            deathMessage = deathMessage.replace(player.getName(), player.getDisplayName());
-            if (player.getKiller() != null) {
-                Player killer = player.getKiller();
-                deathMessage = deathMessage.replace(killer.getName(), killer.getDisplayName());
-            }
+            result = result.replace("%d", player.getDisplayName());
         }
-        if (ConfigManager.enableColouredDeath)
-            e.setDeathMessage(ChatColor.RED + deathMessage);
-        else
-            e.setDeathMessage(deathMessage);
+        result = result.replace("%p", player.getName());
+        return result;
     }
 }

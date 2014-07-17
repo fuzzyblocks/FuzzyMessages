@@ -23,9 +23,9 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package net.lankylord.fuzzymessages.utils;
+package net.fuzzyblocks.fuzzymessages.utils;
 
-import net.lankylord.fuzzymessages.FuzzyMessages;
+import net.fuzzyblocks.fuzzymessages.FuzzyMessages;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 
